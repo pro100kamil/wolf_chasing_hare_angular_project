@@ -16,7 +16,7 @@ import {Configuration} from "./models/configuration";
 })
 export class AppComponent implements AfterViewInit, OnInit {
     title = 'project';
-    fps = 100;
+    fps = 60;
     MILLISECONDS2SECONDS = 1000;
 
     constructor(public drawer: DrawerService,
@@ -44,7 +44,7 @@ export class AppComponent implements AfterViewInit, OnInit {
             this.configuration.wolfDefaultY,
             this.configuration.canvasWidth,
             this.configuration.canvasHeight,
-            this.configuration.hareDefaultSpeed,
+            this.configuration.wolfDefaultSpeed,
             this.configuration.radius
         );
 
@@ -74,7 +74,7 @@ export class AppComponent implements AfterViewInit, OnInit {
             this.configuration.wolfDefaultY,
             this.configuration.canvasWidth,
             this.configuration.canvasHeight,
-            this.configuration.hareDefaultSpeed,
+            this.configuration.wolfDefaultSpeed,
             this.configuration.radius
         );
 

@@ -3,6 +3,7 @@ import {Animal} from "../models/animal";
 import {Hare} from "../models/hare";
 import {Wolf} from "../models/wolf";
 import {Configuration} from "../models/configuration";
+import {TimerService} from "./timer.service";
 
 @Injectable({
     providedIn: 'root'
@@ -35,7 +36,7 @@ export class DrawerService {
         this.hare = hare;
         this.wolf = wolf;
 
-
+        TimerService.start();
         // this.hareX = this.canvas?.width / 2;
         // this.hareY = this.canvas.height - 30;
         // this.hareDx = dx;
@@ -63,11 +64,13 @@ export class DrawerService {
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.drawHare();
         this.hare.move();
+        this.drawHare();
+        //TODO чтобы скорость не зависела от fps
 
-        this.drawWolf();
         this.wolf.move();
+        this.drawWolf();
+
 
 
     }

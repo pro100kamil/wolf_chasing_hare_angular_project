@@ -1,6 +1,7 @@
 import {Animal} from "./animal";
 import {Hare} from "./hare";
 import {Injectable} from "@angular/core";
+import {TimerService} from "../services/timer.service";
 
 export class Wolf implements Animal {
     minX = 0;
@@ -16,29 +17,40 @@ export class Wolf implements Animal {
     }
 
     move() {
-        let yW = this.curY;
+        // let yW = this.hare.curY - this.curY;
+        // let yH = this.hare.curY;
+        // let xW = this.curX;
+        // let xH = this.hare.curX;
+        // let v = this.speed;
+
+        let yW = this.hare.curY - this.curY;
+        let yH = this.hare.curY;
         let xW = this.curX;
         let xH = this.hare.curX;
         let v = this.speed;
 
         let dx = 0, dy = 0;
-        if (xH == xW) {
-            console.log("!! xh == xW");
-            dx = 0;
-            dy = v;
+        if (Math.abs(xH - xW) < 1) {  // < eps
+            if (Math.abs(yW) < 1) {
+                if (this.hare.speed === 0) return;
+                dx = 0;
+                dy = 0;
+                this.hare.speed = 0;
+                TimerService.end();
+            }
+            else {
+                dx = 0;
+                dy = yW >= yH ? -v : v;
+            }
+            console.log("!! xh <= xW");
+
         } else {
             let tgAlpha = yW / (xH - xW);
-            let alpha = Math.atanh(tgAlpha);
+            let alpha = Math.atan(tgAlpha);
+            // if (alpha < 0) alpha += Math.PI / 2;
 
-            if (isNaN(alpha)) return;
-
-            console.log(alpha, v);
-
-            dx = v * Math.sin(alpha);
-            dy = -v * Math.cos(alpha);
-
-            console.log(dx, dy);
-
+            dx = v * Math.cos(alpha);
+            dy = v * Math.sin(alpha);
 
         }
 
@@ -46,7 +58,7 @@ export class Wolf implements Animal {
             this.curX += dx;
         }
         if (this.minY <= this.curY + dy - this.radius && this.curY + dy + this.radius <= this.maxY) {
-            this.curY += dx;
+            this.curY += dy;
         }
 
         console.log(this.curX, this.curY);
