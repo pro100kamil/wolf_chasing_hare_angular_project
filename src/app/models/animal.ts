@@ -3,5 +3,5 @@ export interface Animal {
     curY: number;
     speed: number;
 
-    move(): void;
+    move(fps: number): void;
 }

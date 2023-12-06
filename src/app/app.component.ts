@@ -3,8 +3,6 @@ import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 import {DrawerService} from "./services/drawer.service";
 import {FormsModule} from "@angular/forms";
-import {Hare} from "./models/hare";
-import {Wolf} from "./models/wolf";
 import {Configuration} from "./models/configuration";
 import {TimerService} from "./services/timer.service";
 import {AnimalFactoryService} from "./services/animal-factory.service";
@@ -17,69 +15,88 @@ import {AnimalFactoryService} from "./services/animal-factory.service";
     styleUrl: './app.component.css'
 })
 export class AppComponent implements AfterViewInit, OnInit {
-    title = 'project';
-    wolfStartY = this.configuration.wolfDefaultY;
-    expectedTime = 0;
-    hare = this.animalFactory.getNewHare();
-    wolf = this.animalFactory.getNewWolf(this.hare, this.wolfStartY);
+    protected readonly Math = Math;
 
+    currentInterval: number | undefined;
+    title = 'project';
+
+    wolfStartY = Configuration.wolfDefaultY;
+    wolfSpeed = Configuration.wolfDefaultSpeed;
+    hareSpeed = Configuration.hareDefaultSpeed;
+
+    hare = this.animalFactory.getNewHare(this.hareSpeed);
+    wolf = this.animalFactory.getNewWolf(this.hare, Configuration.centerY - this.wolfStartY, this.wolfSpeed);
 
     constructor(public drawer: DrawerService,
-                public configuration: Configuration,
                 public animalFactory: AnimalFactoryService) {
-    }
-
-    onCanvasClick($event: MouseEvent) {
-        // console.log(this.drawer.hare.x);
-        // console.log(this.drawer.hare.dx);
     }
 
     ngOnInit() {
 
 
-
-        let V = this.configuration.wolfDefaultSpeed;
-        let u = this.configuration.hareDefaultSpeed
-        this.expectedTime = (-this.wolfStartY + this.configuration.centerY) * V / (V * V - u * u);
-
-
-
-        this.drawer.start(this.hare, this.wolf);
     }
 
     ngAfterViewInit(): void {
-        this.drawer.draw();
-        setInterval(() => {
+        this.drawer.init(this.hare, this.wolf);
+        if (this.currentInterval !== undefined) {
+            clearInterval(this.currentInterval);
+        }
+        this.currentInterval = setInterval(() => {
             this.drawer.draw();
-        }, this.configuration.MILLISECONDS2SECONDS / this.configuration.fps);
+        }, Configuration.MILLISECONDS2SECONDS / Configuration.fps);
+        // this.drawer.draw();
+        // this.start();
+    }
+
+    start(){
+        Configuration.move = true;
+
+
+
+        // this.drawer.start();
+        TimerService.start();
     }
 
     onRestartButtonClick($event: MouseEvent) {
-        // let hare = new Hare(
-        //     this.configuration.centerX,
-        //     this.configuration.centerY,
-        //     this.configuration.canvasWidth,
-        //     this.configuration.canvasHeight,
-        //     this.configuration.hareDefaultSpeed,
-        //     this.configuration.radius
-        // );
-        //
-        // let wolf = new Wolf(
-        //     hare,
-        //     this.configuration.centerX,
-        //     this.wolfStartY,
-        //     this.configuration.canvasWidth,
-        //     this.configuration.canvasHeight,
-        //     this.configuration.wolfDefaultSpeed,
-        //     this.configuration.radius
-        // );
+        Configuration.move = false;
+        Configuration.startPosition = true;
 
-        this.hare = this.animalFactory.getNewHare();
-        this.wolf = this.animalFactory.getNewWolf(this.hare, this.wolfStartY);
-        this.drawer.start(this.hare, this.wolf);
+        this.hare = this.animalFactory.getNewHare(this.hareSpeed);
+        this.wolf = this.animalFactory.getNewWolf(this.hare, Configuration.centerY - this.wolfStartY, this.wolfSpeed);
 
+        this.drawer.init(this.hare, this.wolf);
+        TimerService.end();
     }
 
-    protected readonly TimerService = TimerService;
-    protected readonly Math = Math;
+    onApplyButtonClick($event: MouseEvent) {
+        this.hare.speed = this.hareSpeed;
+
+        this.wolf.curY = Configuration.centerY - this.wolfStartY;
+        this.wolf.speed = this.wolfSpeed;
+    }
+
+
+    onStartButtonClick($event: MouseEvent) {
+        Configuration.move = true;
+        Configuration.startPosition = false;
+        this.start();
+    }
+
+    getCurrentDistance(): number {
+        let dist = Math.pow(Math.pow(this.hare.curX - this.wolf.curX, 2) +
+            Math.pow(this.hare.curY - this.wolf.curY, 2), 0.5);
+        if (dist < Configuration.eps) return 0;
+        return dist;
+    }
+
+    getExpectedTime(): number {
+        let V = this.wolf.speed;
+        let u = this.hare.speed;
+        if (u >= V)
+            return Infinity;
+        else
+            return this.wolfStartY * V / (V * V - u * u);
+    }
+
+    protected readonly Configuration = Configuration;
 }

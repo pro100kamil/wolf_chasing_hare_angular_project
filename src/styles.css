@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+p, input, label {
+    font-size: 20px;
+}
+
 body {
     background-color: #ffb1ea;
 }

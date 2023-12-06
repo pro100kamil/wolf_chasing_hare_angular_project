@@ -1,8 +1,50 @@
+#top-part {
+    background-color: pink;
+    /*background-image: url("../assets/images/background.jpg");*/
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#top-part:hover {
+    /*background-color: lightcyan;*/
+
+}
+
+.success-image {
+    background-image: url("../assets/images/background-hover.jpg");
+}
+
+.fail-image {
+    background-image: url("../assets/images/background.jpg");
+}
+
 canvas {
     border: 1px solid black;
     background-color: white;
+    box-sizing: border-box;
 }
 
 canvas:hover {
-    border: 2px solid blue;
+    border: 1px dashed blue;
+    border-radius: 20px;
 }
+
+
+input[type="number"], input[type="button"] {
+    width: 120px;
+    margin: 5px;
+    border-radius: 20px;
+}
+
+input[type="button"]:hover {
+    border: 2px dashed green;
+    background-color: red;
+    color: white;
+}
+
+input[type="button"]:active {
+    border: 2px dashed red;
+    background-color: white;
+    color: green;
+}
+

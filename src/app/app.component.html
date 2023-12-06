@@ -1,48 +1,68 @@
 <div class="main">
-    <div id="div_form">
-        <p>Form</p>
-        <form action="">
-            <label for="hareSpeedInput">Скорость зайца</label>
-            <input type="number" name="hareSpeed" id="hareSpeedInput" [(ngModel)]="drawer.hare.speed">
-            <br>
+    <div id="top-part" [ngClass]="{
+    'success-image': wolf.speed > hare.speed, 'fail-image': wolf.speed <= hare.speed }">
+        <div id="div_form">
+            <form action="">
+                <p>
+                    <label for="hareSpeedInput">Скорость зайца</label>
+                    <input type="number" name="hareSpeed" id="hareSpeedInput"
+                           [(ngModel)]="hareSpeed">
+                    пикселей в секунду
+                </p>
 
-            <label for="wolfSpeedInput">Скорость волка</label>
-            <input type="number" name="wolfSpeed" id="wolfSpeedInput" [(ngModel)]="drawer.wolf.speed">
+                <p>
+                    <label for="wolfSpeedInput">Скорость волка</label>
+                    <input type="number" name="wolfSpeed" id="wolfSpeedInput"
+                           [(ngModel)]="wolfSpeed">
+                    пикселей в секунду
+                </p>
 
-            <br>
+                <p>
+                    <label for="wolfSpeedInput">Координата Y волка</label>
+                    <input type="number" name="wolfStartY" id="wolfStartYInput"
+                           [(ngModel)]="wolfStartY">
+                    кол-во пикселей над зайцем
+                </p>
 
-            <label for="wolfSpeedInput">Координата Y волка</label>
-            <input type="number" name="wolfStartY" id="wolfStartYInput" [(ngModel)]="wolfStartY">
-            <br>
-
-            <input type="button" value="заново" (click)="onRestartButtonClick($event)">
-        </form>
+                <input type="button" value="старт"
+                       [disabled]="Configuration.move || !Configuration.startPosition"
+                       (click)="onStartButtonClick($event)">
+                <input type="button" value="заново"
+                       [disabled]="Configuration.startPosition"
+                       (click)="onRestartButtonClick($event)">
+                <input type="button" value="применить"
+                       [disabled]="Configuration.move || !Configuration.startPosition"
+                       (click)="onApplyButtonClick($event)">
+            </form>
+        </div>
+        <div>
+            <p>Время погони: <b>{{ drawer.curTime | number:".0-2" }}</b>с,
+                ожидаемое время: <b>{{ getExpectedTime() | number:".0-2" }}</b>с,
+                координата зайца: (<b>{{ (hare.curX - Configuration.centerX)  | number:".0-0" }}</b>;
+                <b>{{ (Configuration.centerY - hare.curY) | number:".0-0" }}</b>),
+                координата волка: (<b>{{ (wolf.curX - Configuration.centerX) | number:".0-0" }}</b>;
+                <b>{{ (Configuration.centerY - wolf.curY)  | number:".0-0" }}</b>).</p>
+        </div>
     </div>
-    <div>
-        <p>Время погони: <b>{{ TimerService.getCurrentTimeExecutionInSeconds() }}</b></p>
-        <p>Ожидаемое время: <b>{{ expectedTime }}</b></p>
-        <p>Координата зайца: <b>{{ 1 }}</b></p>
-        <p>Координата волка: <b>{{ 2 }}</b></p>
-    </div>
-    <hr>
-    <br>
 
     <div id="div_canvas">
-        <canvas id="canvas" width="{{configuration.canvasWidth}}" height="{{configuration.canvasHeight}}" (click)="onCanvasClick($event)">
+        <canvas id="canvas" width="{{Configuration.canvasWidth}}" height="{{Configuration.canvasHeight}}">
 
         </canvas>
     </div>
 
     <div>
-<!--        TODO округление -->
-        <p>{{ wolf.speed > hare.speed ? "Волк догонит" : "Волк не догонит" }}</p>
-        <p>Текущее расстояние: {{ Math.pow(Math.pow(hare.curX - wolf.curX, 2) +
-            Math.pow(hare.curY - wolf.curY, 2), 0.5) }}</p>
+        <p><b>{{ wolf.speed > hare.speed ? "Волк догонит" : "Волк не догонит" }}</b></p>
+        <p>Текущее расстояние: {{ getCurrentDistance() }}</p>
 
         <div *ngIf="wolf.speed === hare.speed; else elseBlock">
-            Предельное расстояние:
-            {{ (-wolfStartY + configuration.centerY) / 2 }}
+            <p>
+                Предельное расстояние:
+                {{ wolfStartY / 2 }}
+            </p>
         </div>
-        <ng-template #elseBlock>Предельное расстояние не существует</ng-template>
+        <ng-template #elseBlock><p>
+            Предельное расстояние не существует
+        </p></ng-template>
     </div>
 </div>

@@ -1,30 +1,36 @@
 import {Injectable} from "@angular/core";
-import {TimerService} from "../services/timer.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class Configuration {
-    fps = 100;
-    MILLISECONDS2SECONDS = 1000;
+    static move = false;            //есть ли движение в данный момент
+    static startPosition = true;    //находятся ли объекты в стартовой позиции
 
-    canvasWidth= 1000;
-    canvasHeight = 500;
+    static fps = 100;
+    static MILLISECONDS2SECONDS = 1000;
 
-    centerX = 200;
-    centerY = 250;
+    static canvasWidth= 1000;
+    static canvasHeight = 500;
+
+    static centerX = 50;
+    static centerY = Configuration.canvasHeight - 50;
     // (centerX;centerY) - point with (0;0) math coordinates
 
-    radius = 10;
+    static radius = 10;
 
     // hareColor = "#c4c4c4";
     // wolfColor = "#100d0d";
 
-    hareColor = "#51ff16";
-    wolfColor = "#ff0202";
+    static hareColor = "#51ff16";
+    static wolfColor = "#ff0202";
+    // static wolfColor = "pink";
+    static wolfTrajectoryColor = "red";
 
-    hareDefaultSpeed = 70;     //pixels/second
-    wolfDefaultSpeed = 70;     //pixels/second
+    static hareDefaultSpeed = 50;     //pixels/second
+    static wolfDefaultSpeed = 80;     //pixels/second
 
-    wolfDefaultY = this.centerY - 200;
+    static wolfDefaultY = 350;          //кол-во пикселей над зайцем
+
+    static eps = 1;
 }
