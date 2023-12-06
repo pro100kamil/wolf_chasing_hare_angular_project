@@ -5,8 +5,11 @@ import {TimerService} from "../services/timer.service";
     providedIn: 'root'
 })
 export class Configuration {
-    canvasWidth= 1200;
-    canvasHeight = 300;
+    fps = 100;
+    MILLISECONDS2SECONDS = 1000;
+
+    canvasWidth= 1000;
+    canvasHeight = 500;
 
     centerX = 200;
     centerY = 250;
@@ -14,11 +17,14 @@ export class Configuration {
 
     radius = 10;
 
-    hareColor = "#c4c4c4";
-    wolfColor = "#100d0d";
+    // hareColor = "#c4c4c4";
+    // wolfColor = "#100d0d";
 
-    hareDefaultSpeed = 0.1;
-    wolfDefaultSpeed = 0.2;
+    hareColor = "#51ff16";
+    wolfColor = "#ff0202";
+
+    hareDefaultSpeed = 70;     //pixels/second
+    wolfDefaultSpeed = 70;     //pixels/second
 
     wolfDefaultY = this.centerY - 200;
 }

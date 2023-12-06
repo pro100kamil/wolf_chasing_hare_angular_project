@@ -6,6 +6,8 @@ import {FormsModule} from "@angular/forms";
 import {Hare} from "./models/hare";
 import {Wolf} from "./models/wolf";
 import {Configuration} from "./models/configuration";
+import {TimerService} from "./services/timer.service";
+import {AnimalFactoryService} from "./services/animal-factory.service";
 
 @Component({
     selector: 'app-root',
@@ -16,11 +18,15 @@ import {Configuration} from "./models/configuration";
 })
 export class AppComponent implements AfterViewInit, OnInit {
     title = 'project';
-    fps = 60;
-    MILLISECONDS2SECONDS = 1000;
+    wolfStartY = this.configuration.wolfDefaultY;
+    expectedTime = 0;
+    hare = this.animalFactory.getNewHare();
+    wolf = this.animalFactory.getNewWolf(this.hare, this.wolfStartY);
+
 
     constructor(public drawer: DrawerService,
-                public configuration: Configuration) {
+                public configuration: Configuration,
+                public animalFactory: AnimalFactoryService) {
     }
 
     onCanvasClick($event: MouseEvent) {
@@ -29,56 +35,51 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
 
     ngOnInit() {
-        let hare = new Hare(
-            this.configuration.centerX,
-            this.configuration.centerY,
-            this.configuration.canvasWidth,
-            this.configuration.canvasHeight,
-            this.configuration.hareDefaultSpeed,
-            this.configuration.radius
-        );
 
-        let wolf = new Wolf(
-            hare,
-            this.configuration.centerX,
-            this.configuration.wolfDefaultY,
-            this.configuration.canvasWidth,
-            this.configuration.canvasHeight,
-            this.configuration.wolfDefaultSpeed,
-            this.configuration.radius
-        );
 
-        this.drawer.start(hare, wolf);
+
+        let V = this.configuration.wolfDefaultSpeed;
+        let u = this.configuration.hareDefaultSpeed
+        this.expectedTime = (-this.wolfStartY + this.configuration.centerY) * V / (V * V - u * u);
+
+
+
+        this.drawer.start(this.hare, this.wolf);
     }
 
     ngAfterViewInit(): void {
         this.drawer.draw();
         setInterval(() => {
             this.drawer.draw();
-        }, this.MILLISECONDS2SECONDS / this.fps);
+        }, this.configuration.MILLISECONDS2SECONDS / this.configuration.fps);
     }
 
     onRestartButtonClick($event: MouseEvent) {
-        let hare = new Hare(
-            this.configuration.centerX,
-            this.configuration.centerY,
-            this.configuration.canvasWidth,
-            this.configuration.canvasHeight,
-            this.configuration.hareDefaultSpeed,
-            this.configuration.radius
-        );
+        // let hare = new Hare(
+        //     this.configuration.centerX,
+        //     this.configuration.centerY,
+        //     this.configuration.canvasWidth,
+        //     this.configuration.canvasHeight,
+        //     this.configuration.hareDefaultSpeed,
+        //     this.configuration.radius
+        // );
+        //
+        // let wolf = new Wolf(
+        //     hare,
+        //     this.configuration.centerX,
+        //     this.wolfStartY,
+        //     this.configuration.canvasWidth,
+        //     this.configuration.canvasHeight,
+        //     this.configuration.wolfDefaultSpeed,
+        //     this.configuration.radius
+        // );
 
-        let wolf = new Wolf(
-            hare,
-            this.configuration.centerX,
-            this.configuration.wolfDefaultY,
-            this.configuration.canvasWidth,
-            this.configuration.canvasHeight,
-            this.configuration.wolfDefaultSpeed,
-            this.configuration.radius
-        );
-
-        this.drawer.start(hare, wolf);
+        this.hare = this.animalFactory.getNewHare();
+        this.wolf = this.animalFactory.getNewWolf(this.hare, this.wolfStartY);
+        this.drawer.start(this.hare, this.wolf);
 
     }
+
+    protected readonly TimerService = TimerService;
+    protected readonly Math = Math;
 }

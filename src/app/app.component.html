@@ -3,20 +3,46 @@
         <p>Form</p>
         <form action="">
             <label for="hareSpeedInput">Скорость зайца</label>
-            <input type="number" name="hareDx" id="hareSpeedInput" [(ngModel)]="drawer.hare.speed">
+            <input type="number" name="hareSpeed" id="hareSpeedInput" [(ngModel)]="drawer.hare.speed">
             <br>
+
             <label for="wolfSpeedInput">Скорость волка</label>
-            <input type="number" name="wolfDx" id="wolfSpeedInput" [(ngModel)]="drawer.wolf.speed">
+            <input type="number" name="wolfSpeed" id="wolfSpeedInput" [(ngModel)]="drawer.wolf.speed">
+
             <br>
+
+            <label for="wolfSpeedInput">Координата Y волка</label>
+            <input type="number" name="wolfStartY" id="wolfStartYInput" [(ngModel)]="wolfStartY">
+            <br>
+
             <input type="button" value="заново" (click)="onRestartButtonClick($event)">
         </form>
+    </div>
+    <div>
+        <p>Время погони: <b>{{ TimerService.getCurrentTimeExecutionInSeconds() }}</b></p>
+        <p>Ожидаемое время: <b>{{ expectedTime }}</b></p>
+        <p>Координата зайца: <b>{{ 1 }}</b></p>
+        <p>Координата волка: <b>{{ 2 }}</b></p>
     </div>
     <hr>
     <br>
 
     <div id="div_canvas">
-        <canvas id="canvas" width="1200px" height="300px" (click)="onCanvasClick($event)">
+        <canvas id="canvas" width="{{configuration.canvasWidth}}" height="{{configuration.canvasHeight}}" (click)="onCanvasClick($event)">
 
         </canvas>
+    </div>
+
+    <div>
+<!--        TODO округление -->
+        <p>{{ wolf.speed > hare.speed ? "Волк догонит" : "Волк не догонит" }}</p>
+        <p>Текущее расстояние: {{ Math.pow(Math.pow(hare.curX - wolf.curX, 2) +
+            Math.pow(hare.curY - wolf.curY, 2), 0.5) }}</p>
+
+        <div *ngIf="wolf.speed === hare.speed; else elseBlock">
+            Предельное расстояние:
+            {{ (-wolfStartY + configuration.centerY) / 2 }}
+        </div>
+        <ng-template #elseBlock>Предельное расстояние не существует</ng-template>
     </div>
 </div>

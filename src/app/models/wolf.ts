@@ -6,6 +6,7 @@ import {TimerService} from "../services/timer.service";
 export class Wolf implements Animal {
     minX = 0;
     minY = 0;
+    end = false;
 
     constructor(public hare: Hare,
                 public curX: number,
@@ -17,6 +18,7 @@ export class Wolf implements Animal {
     }
 
     move() {
+        if (this.end) return;
         // let yW = this.hare.curY - this.curY;
         // let yH = this.hare.curY;
         // let xW = this.curX;
@@ -32,11 +34,12 @@ export class Wolf implements Animal {
         let dx = 0, dy = 0;
         if (Math.abs(xH - xW) < 1) {  // < eps
             if (Math.abs(yW) < 1) {
-                if (this.hare.speed === 0) return;
+                if (this.hare.end) return;
                 dx = 0;
                 dy = 0;
-                this.hare.speed = 0;
+                this.hare.stop();
                 TimerService.end();
+                this.end = true;
             }
             else {
                 dx = 0;
