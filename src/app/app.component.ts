@@ -4,7 +4,6 @@ import {RouterOutlet} from '@angular/router';
 import {DrawerService} from "./services/drawer.service";
 import {FormsModule} from "@angular/forms";
 import {Configuration} from "./configuration/configuration";
-import {TimerService} from "./services/timer.service";
 import {AnimalFactoryService} from "./services/animal-factory.service";
 
 @Component({
@@ -37,7 +36,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
 
     ngAfterViewInit(): void {
-        this.drawer.init(this.hare, this.wolf);
+        this.drawer.init();
+        this.drawer.setAnimals(this.hare, this.wolf);
         setInterval(() => {
             this.drawer.draw();
         }, Configuration.MILLISECONDS2SECONDS / Configuration.fps);
@@ -46,7 +46,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     start() {
         Configuration.move = true;
         Configuration.startPosition = false;
-        TimerService.start();
     }
 
     restart() {
@@ -56,8 +55,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.hare = this.animalFactory.getNewHare(this.hareSpeed);
         this.wolf = this.animalFactory.getNewWolf(this.hare, this.wolfStartY, this.wolfSpeed);
 
-        this.drawer.init(this.hare, this.wolf);
-        TimerService.end();
+        this.drawer.setAnimals(this.hare, this.wolf);
     }
 
 

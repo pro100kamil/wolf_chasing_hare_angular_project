@@ -30,5 +30,4 @@ export class AnimalFactoryService {
             Configuration.radius
         );
     }
-
 }

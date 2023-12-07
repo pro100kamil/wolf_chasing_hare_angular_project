@@ -1,6 +1,5 @@
 import {Animal} from "./animal";
 import {Configuration} from "../configuration/configuration";
-import {TimerService} from "../services/timer.service";
 
 
 export class Hare implements Animal{
@@ -21,7 +20,6 @@ export class Hare implements Animal{
             this.curX = newX;
         } else {
             Configuration.move = false;
-            TimerService.end();
         }
     }
 }

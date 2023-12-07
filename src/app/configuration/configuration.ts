@@ -7,7 +7,7 @@ export class Configuration {
     static move = false;            //есть ли движение в данный момент
     static startPosition = true;    //находятся ли объекты в стартовой позиции
 
-    static fps = 100;
+    static fps = 50;
     static MILLISECONDS2SECONDS = 1000;
 
     static canvasWidth= 1000;
@@ -21,8 +21,8 @@ export class Configuration {
 
     static wolfTrajectoryColor = "red";
 
-    static hareDefaultSpeed = 50;     //pixels/second
-    static wolfDefaultSpeed = 80;     //pixels/second
+    static hareDefaultSpeed = 50;       // пиксели в секунду
+    static wolfDefaultSpeed = 80;       // пиксели в секунду
 
     static wolfDefaultY = 350;          //кол-во пикселей над зайцем
 

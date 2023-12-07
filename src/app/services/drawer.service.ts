@@ -1,9 +1,7 @@
-import {AfterViewInit, Injectable, OnInit} from '@angular/core';
-import {Animal} from "../models/animal";
+import {Injectable} from '@angular/core';
 import {Hare} from "../models/hare";
 import {Wolf} from "../models/wolf";
 import {Configuration} from "../configuration/configuration";
-import {TimerService} from "./timer.service";
 
 
 @Injectable({
@@ -19,11 +17,7 @@ export class DrawerService{
     curTime = 0;
     wolfTrajectory: Array<Array<number>> = [];
 
-    constructor(
-        public configuration: Configuration
-    ) {}
-
-    init(hare: Hare, wolf: Wolf) {
+    init() {
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
 
@@ -32,27 +26,19 @@ export class DrawerService{
 
         this.wolfImg = new Image();
         this.wolfImg.src = "assets/images/wolf.png";
+    }
 
+    setAnimals(hare: Hare, wolf: Wolf) {
         this.hare = hare;
         this.wolf = wolf;
         this.wolfTrajectory = [];
-    }
-
-    start() {
-
+        this.curTime = 0;
     }
 
     drawHare() {
         this.ctx.drawImage(this.hareImg,
             this.hare.curX - Configuration.radius, this.hare.curY - Configuration.radius,
             Configuration.radius * 2, Configuration.radius * 2);
-
-
-        // this.ctx.beginPath();
-        // this.ctx.arc(this.hare.curX, this.hare.curY, Configuration.radius, 0, Math.PI * 2);
-        // this.ctx.fillStyle = Configuration.hareColor;
-        // this.ctx.fill();
-        // this.ctx.closePath();
     }
 
     drawTrajectory() {
@@ -69,12 +55,6 @@ export class DrawerService{
         this.ctx.drawImage(this.wolfImg,
             this.wolf.curX - Configuration.radius, this.wolf.curY - Configuration.radius,
             Configuration.radius * 2, Configuration.radius * 2);
-
-        // this.ctx.beginPath();
-        // this.ctx.arc(this.wolf.curX, this.wolf.curY, Configuration.radius, 0, Math.PI * 2);
-        // this.ctx.fillStyle = Configuration.wolfColor;
-        // this.ctx.fill();
-        // this.ctx.closePath();
     }
 
     drawArrow(x: number, y: number, arrowDelta: number, direction: string): void {
@@ -111,6 +91,7 @@ export class DrawerService{
         let arrowDelta: number = 4;
         this.ctx.beginPath();
 
+        this.ctx.fillStyle = "black";
         this.drawPoint(Configuration.centerX, Configuration.centerY, 4);
 
         this.ctx.moveTo(Configuration.centerX - radius - delta, Configuration.centerY);
@@ -125,22 +106,15 @@ export class DrawerService{
         this.ctx.fillText("Y", Configuration.centerX, Configuration.centerY - radius - delta);
 
         //OX
-        // this.drawTextWithDeltaY("-R", Configuration.centerX - radius, Configuration.centerY);
-        // this.drawTextWithDeltaY("-R/2", Configuration.centerX - radius / 2, Configuration.centerY);
         this.drawTextWithDeltaY("200", Configuration.centerX + radius / 2, Configuration.centerY);
         this.drawTextWithDeltaY("400", Configuration.centerX + radius, Configuration.centerY);
         this.drawTextWithDeltaY("600", Configuration.centerX + 1.5 * radius, Configuration.centerY);
         this.drawTextWithDeltaY("800", Configuration.centerX + 2 * radius, Configuration.centerY);
 
         //OY
-        // this.drawTextWithDeltaX("-R", Configuration.centerX, Configuration.centerY + radius);
-        // this.drawTextWithDeltaX("-R/2", Configuration.centerX, Configuration.centerY + radius / 2);
         this.drawTextWithDeltaX("200", Configuration.centerX, Configuration.centerY - radius / 2);
         this.drawTextWithDeltaX("400", Configuration.centerX, Configuration.centerY - radius);
 
-
-        // this.ctx.strokeStyle = "black";
-        // this.ctx.fillStyle = "black";
         this.ctx.fill();
         this.ctx.stroke();
         this.ctx.closePath();
@@ -150,12 +124,13 @@ export class DrawerService{
         if (Configuration.move) {
             this.hare.move(Configuration.fps);
 
-            this.wolfTrajectory.push([this.wolf.curX, this.wolf.curY]);
-            //TODO здесь прибавлять время
-            this.wolf.move(Configuration.fps);
-        }
+            if (Configuration.move) {       // потому что заяц может остановится при достижении границы
+                this.wolfTrajectory.push([this.wolf.curX, this.wolf.curY]);
+                this.wolf.move(Configuration.fps);
+            }
 
-        this.curTime = TimerService.getCurrentTimeExecutionInSeconds();
+            this.curTime += 1 / Configuration.fps;
+        }
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -164,7 +139,5 @@ export class DrawerService{
         this.drawHare();
         this.drawTrajectory();
         this.drawWolf();
-
-
     }
 }
