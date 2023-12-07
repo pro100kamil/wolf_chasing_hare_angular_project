@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 import {DrawerService} from "./services/drawer.service";
 import {FormsModule} from "@angular/forms";
-import {Configuration} from "./models/configuration";
+import {Configuration} from "./configuration/configuration";
 import {TimerService} from "./services/timer.service";
 import {AnimalFactoryService} from "./services/animal-factory.service";
 
@@ -16,8 +16,8 @@ import {AnimalFactoryService} from "./services/animal-factory.service";
 })
 export class AppComponent implements AfterViewInit, OnInit {
     protected readonly Math = Math;
+    protected readonly Configuration = Configuration;
 
-    currentInterval: number | undefined;
     title = 'project';
 
     wolfStartY = Configuration.wolfDefaultY;
@@ -38,24 +38,18 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     ngAfterViewInit(): void {
         this.drawer.init(this.hare, this.wolf);
-        if (this.currentInterval !== undefined) {
-            clearInterval(this.currentInterval);
-        }
-        this.currentInterval = setInterval(() => {
+        setInterval(() => {
             this.drawer.draw();
         }, Configuration.MILLISECONDS2SECONDS / Configuration.fps);
     }
 
-    start(){
+    start() {
         Configuration.move = true;
-
-
-
-        // this.drawer.start();
+        Configuration.startPosition = false;
         TimerService.start();
     }
 
-    onRestartButtonClick($event: MouseEvent) {
+    restart() {
         Configuration.move = false;
         Configuration.startPosition = true;
 
@@ -66,6 +60,15 @@ export class AppComponent implements AfterViewInit, OnInit {
         TimerService.end();
     }
 
+
+    onStartButtonClick($event: MouseEvent) {
+        this.start();
+    }
+
+    onRestartButtonClick($event: MouseEvent) {
+        this.restart();
+    }
+
     onApplyButtonClick($event: MouseEvent) {
         this.hare.speed = this.hareSpeed;
 
@@ -74,17 +77,10 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.wolf.speed = this.wolfSpeed;
     }
 
-
-    onStartButtonClick($event: MouseEvent) {
-        Configuration.move = true;
-        Configuration.startPosition = false;
-        this.start();
-    }
-
     hasChanges() {
         return this.hareSpeed !== this.hare.speed ||
-        this.wolfSpeed !== this.wolf.speed ||
-        this.wolfStartY !== this.wolf.startY;
+            this.wolfSpeed !== this.wolf.speed ||
+            this.wolfStartY !== this.wolf.startY;
     }
 
     getCurrentDistance(): number {
@@ -102,6 +98,4 @@ export class AppComponent implements AfterViewInit, OnInit {
         else
             return this.wolf.startY * V / (V * V - u * u);
     }
-
-    protected readonly Configuration = Configuration;
 }

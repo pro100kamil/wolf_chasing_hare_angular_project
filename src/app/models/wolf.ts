@@ -1,16 +1,16 @@
 import {Animal} from "./animal";
 import {Hare} from "./hare";
 import {TimerService} from "../services/timer.service";
-import {Configuration} from "./configuration";
+import {Configuration} from "../configuration/configuration";
 
 export class Wolf implements Animal {
     minX = 0;
     minY = 0;
 
     constructor(public hare: Hare,
-                public startY: number,
-                public curX: number,
-                public curY: number,
+                public startY: number,      // в математических координатах
+                public curX: number,        // в канвасных координатах
+                public curY: number,        // в канвасных координатах
                 public maxX: number,
                 public maxY: number,
                 public speed: number,

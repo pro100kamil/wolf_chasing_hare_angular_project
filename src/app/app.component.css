@@ -1,21 +1,19 @@
 #top-part {
     background-color: pink;
-    /*background-image: url("../assets/images/background.jpg");*/
     background-repeat: no-repeat;
     background-size: contain;
 }
 
 #top-part:hover {
-    /*background-color: lightcyan;*/
-
+    background-color: #fdb6c2;
 }
 
 .success-image {
-    background-image: url("../assets/images/background-hover.jpg");
+    background-image: url("../assets/images/wolfCatchesHare.jpg");
 }
 
 .fail-image {
-    background-image: url("../assets/images/background.jpg");
+    background-image: url("../assets/images/wolfDoesntCatchHare.jpg");
 }
 
 canvas {
@@ -36,6 +34,11 @@ input[type="number"], input[type="button"] {
     border-radius: 20px;
 }
 
+input[type="number"]:hover {
+    border: 2px dashed deeppink;
+    color: deeppink;
+}
+
 input[type="button"]:hover {
     border: 2px dashed green;
     background-color: red;
@@ -48,3 +51,6 @@ input[type="button"]:active {
     color: green;
 }
 
+input.ng-touched.ng-invalid {
+    border: solid red 2px;
+}

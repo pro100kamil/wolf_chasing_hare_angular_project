@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Configuration} from "../models/configuration";
+import {Configuration} from "../configuration/configuration";
 import {Hare} from "../models/hare";
 import {Wolf} from "../models/wolf";
 

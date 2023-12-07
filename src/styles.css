@@ -9,5 +9,6 @@ p, input, label {
 }
 
 body {
-    background-color: #ffb1ea;
+    /*background-color: #ffb1ea;*/
+    background: linear-gradient(#ffb1ea, #f185d3);
 }

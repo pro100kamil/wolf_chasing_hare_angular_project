@@ -4,28 +4,40 @@
         <div id="div_form">
             <form action="">
                 <p>
-                    <label for="hareSpeedInput">Скорость зайца</label>
-                    <input type="number" name="hareSpeed" id="hareSpeedInput"
+                    <label for="hareSpeedInput">Скорость зайца:</label>
+                    <input type="number" name="hareSpeedInput" id="hareSpeedInput"
+                           required
                            step="5"
+                           min="1"
+                           max="200"
                            [(ngModel)]="hareSpeed"
+                           #hareSpeedInput="ngModel"
                            [disabled]="Configuration.move || !Configuration.startPosition">
                     пикселей в секунду
                 </p>
 
                 <p>
-                    <label for="wolfSpeedInput">Скорость волка</label>
-                    <input type="number" name="wolfSpeed" id="wolfSpeedInput"
+                    <label for="wolfSpeedInput">Скорость волка:</label>
+                    <input type="number" name="wolfSpeedInput" id="wolfSpeedInput"
+                           required
                            step="5"
+                           min="1"
+                           max="200"
                            [(ngModel)]="wolfSpeed"
+                           #wolfSpeedInput="ngModel"
                            [disabled]="Configuration.move || !Configuration.startPosition">
                     пикселей в секунду
                 </p>
 
                 <p>
-                    <label for="wolfSpeedInput">Координата Y волка</label>
-                    <input type="number" name="wolfStartY" id="wolfStartYInput"
+                    <label for="wolfSpeedInput">Координата Y волка:</label>
+                    <input type="number" name="wolfStartYInput" id="wolfStartYInput"
+                           required
                            step="5"
+                           min="25"
+                           max="400"
                            [(ngModel)]="wolfStartY"
+                           #wolfStartYInput="ngModel"
                            [disabled]="Configuration.move || !Configuration.startPosition">
                     кол-во пикселей над зайцем
                 </p>
@@ -37,7 +49,8 @@
                        [disabled]="Configuration.startPosition"
                        (click)="onRestartButtonClick($event)">
                 <input type="button" value="применить"
-                       [disabled]="Configuration.move || !Configuration.startPosition || !hasChanges()"
+                       [disabled]="Configuration.move || !Configuration.startPosition || !hasChanges()
+                                || hareSpeedInput.invalid || wolfSpeedInput.invalid || wolfStartYInput.invalid"
                        (click)="onApplyButtonClick($event)">
             </form>
         </div>

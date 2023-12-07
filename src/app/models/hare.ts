@@ -1,6 +1,5 @@
 import {Animal} from "./animal";
-import {Injectable} from "@angular/core";
-import {Configuration} from "./configuration";
+import {Configuration} from "../configuration/configuration";
 import {TimerService} from "../services/timer.service";
 
 

@@ -2,7 +2,7 @@ import {AfterViewInit, Injectable, OnInit} from '@angular/core';
 import {Animal} from "../models/animal";
 import {Hare} from "../models/hare";
 import {Wolf} from "../models/wolf";
-import {Configuration} from "../models/configuration";
+import {Configuration} from "../configuration/configuration";
 import {TimerService} from "./timer.service";
 
 
@@ -151,7 +151,7 @@ export class DrawerService{
             this.hare.move(Configuration.fps);
 
             this.wolfTrajectory.push([this.wolf.curX, this.wolf.curY]);
-
+            //TODO здесь прибавлять время
             this.wolf.move(Configuration.fps);
         }
 

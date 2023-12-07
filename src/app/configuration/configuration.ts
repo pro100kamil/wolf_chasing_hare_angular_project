@@ -15,16 +15,10 @@ export class Configuration {
 
     static centerX = 50;
     static centerY = Configuration.canvasHeight - 50;
-    // (centerX;centerY) - point with (0;0) math coordinates
+    // (centerX;centerY) - (0;0)
 
     static radius = 25;
 
-    // hareColor = "#c4c4c4";
-    // wolfColor = "#100d0d";
-
-    static hareColor = "#51ff16";
-    static wolfColor = "#ff0202";
-    // static wolfColor = "pink";
     static wolfTrajectoryColor = "red";
 
     static hareDefaultSpeed = 50;     //pixels/second
