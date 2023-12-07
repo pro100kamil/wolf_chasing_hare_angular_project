@@ -21,8 +21,9 @@ export class AnimalFactoryService {
     getNewWolf(hare: Hare, wolfStartY: number, speed: number): Wolf {
         return new Wolf(
             hare,
-            Configuration.centerX,
             wolfStartY,
+            Configuration.centerX,
+            Configuration.centerY - wolfStartY,
             Configuration.canvasWidth,
             Configuration.canvasHeight,
             speed,

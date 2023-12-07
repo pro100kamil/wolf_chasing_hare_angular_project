@@ -1,6 +1,5 @@
 import {Animal} from "./animal";
 import {Hare} from "./hare";
-import {Injectable} from "@angular/core";
 import {TimerService} from "../services/timer.service";
 import {Configuration} from "./configuration";
 
@@ -9,6 +8,7 @@ export class Wolf implements Animal {
     minY = 0;
 
     constructor(public hare: Hare,
+                public startY: number,
                 public curX: number,
                 public curY: number,
                 public maxX: number,
@@ -18,26 +18,31 @@ export class Wolf implements Animal {
     }
 
     move(fps: number) {
-        let yW = this.hare.curY - this.curY;
+        let yW = this.curY;
         let yH = this.hare.curY;
         let xW = this.curX;
         let xH = this.hare.curX;
         let v = this.speed / fps;
 
         let dx = 0, dy = 0;
-        if (Math.abs(xH - xW) < 1) {  // < eps
-            if (Math.abs(yW) < 1) {
+        // if (Math.abs(xH - xW) < 1) {  // < eps
+        //     if (Math.abs(yW) < 1) {
+        if (xW - xH >= 0) {  // < eps
+            if (yH - yW <= 0) {
+
                 dx = 0;
                 dy = 0;
                 Configuration.move = false;
                 TimerService.end();
+                this.curX = this.hare.curX;
+                this.curY = this.hare.curY;
             }
             else {
                 dx = 0;
                 dy = yW >= yH ? -v : v;
             }
         } else {
-            let tgAlpha = yW / (xH - xW);
+            let tgAlpha = (yH - yW) / (xH - xW);
             let alpha = Math.atan(tgAlpha);
 
             dx = v * Math.cos(alpha);

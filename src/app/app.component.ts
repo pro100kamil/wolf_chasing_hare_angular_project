@@ -25,7 +25,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     hareSpeed = Configuration.hareDefaultSpeed;
 
     hare = this.animalFactory.getNewHare(this.hareSpeed);
-    wolf = this.animalFactory.getNewWolf(this.hare, Configuration.centerY - this.wolfStartY, this.wolfSpeed);
+    wolf = this.animalFactory.getNewWolf(this.hare, this.wolfStartY, this.wolfSpeed);
 
     constructor(public drawer: DrawerService,
                 public animalFactory: AnimalFactoryService) {
@@ -44,8 +44,6 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.currentInterval = setInterval(() => {
             this.drawer.draw();
         }, Configuration.MILLISECONDS2SECONDS / Configuration.fps);
-        // this.drawer.draw();
-        // this.start();
     }
 
     start(){
@@ -62,7 +60,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         Configuration.startPosition = true;
 
         this.hare = this.animalFactory.getNewHare(this.hareSpeed);
-        this.wolf = this.animalFactory.getNewWolf(this.hare, Configuration.centerY - this.wolfStartY, this.wolfSpeed);
+        this.wolf = this.animalFactory.getNewWolf(this.hare, this.wolfStartY, this.wolfSpeed);
 
         this.drawer.init(this.hare, this.wolf);
         TimerService.end();
@@ -72,6 +70,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.hare.speed = this.hareSpeed;
 
         this.wolf.curY = Configuration.centerY - this.wolfStartY;
+        this.wolf.startY = this.wolfStartY;
         this.wolf.speed = this.wolfSpeed;
     }
 
@@ -80,6 +79,12 @@ export class AppComponent implements AfterViewInit, OnInit {
         Configuration.move = true;
         Configuration.startPosition = false;
         this.start();
+    }
+
+    hasChanges() {
+        return this.hareSpeed !== this.hare.speed ||
+        this.wolfSpeed !== this.wolf.speed ||
+        this.wolfStartY !== this.wolf.startY;
     }
 
     getCurrentDistance(): number {
@@ -95,7 +100,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         if (u >= V)
             return Infinity;
         else
-            return this.wolfStartY * V / (V * V - u * u);
+            return this.wolf.startY * V / (V * V - u * u);
     }
 
     protected readonly Configuration = Configuration;

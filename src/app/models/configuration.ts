@@ -17,7 +17,7 @@ export class Configuration {
     static centerY = Configuration.canvasHeight - 50;
     // (centerX;centerY) - point with (0;0) math coordinates
 
-    static radius = 10;
+    static radius = 25;
 
     // hareColor = "#c4c4c4";
     // wolfColor = "#100d0d";

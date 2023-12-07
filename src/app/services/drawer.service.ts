@@ -14,6 +14,8 @@ export class DrawerService{
     ctx: any;
     hare: Hare = <Hare><unknown>null;
     wolf: Wolf = <Wolf><unknown>null;
+    hareImg: HTMLImageElement = <HTMLImageElement><unknown>null;
+    wolfImg: HTMLImageElement = <HTMLImageElement><unknown>null;
     curTime = 0;
     wolfTrajectory: Array<Array<number>> = [];
 
@@ -25,6 +27,12 @@ export class DrawerService{
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
 
+        this.hareImg = new Image();
+        this.hareImg.src = "assets/images/hare.png";
+
+        this.wolfImg = new Image();
+        this.wolfImg.src = "assets/images/wolf.png";
+
         this.hare = hare;
         this.wolf = wolf;
         this.wolfTrajectory = [];
@@ -35,10 +43,9 @@ export class DrawerService{
     }
 
     drawHare() {
-        let img = new Image();
-        img.src = "../../assets/images/hare.png";
-        this.ctx.drawImage(img, this.hare.curX - 25, this.hare.curY - 25,
-            50, 50); // drawImage(img, x, y);
+        this.ctx.drawImage(this.hareImg,
+            this.hare.curX - Configuration.radius, this.hare.curY - Configuration.radius,
+            Configuration.radius * 2, Configuration.radius * 2);
 
 
         // this.ctx.beginPath();
@@ -49,7 +56,6 @@ export class DrawerService{
     }
 
     drawTrajectory() {
-
         this.wolfTrajectory.forEach((point) => {
             this.ctx.beginPath();
             this.ctx.arc(point[0], point[1], 1, 0, Math.PI * 2);
@@ -57,16 +63,12 @@ export class DrawerService{
             this.ctx.fill();
             this.ctx.closePath();
         });
-
     }
 
     drawWolf() {
-
-
-        let img = new Image();
-        img.src = "../../assets/images/wolf.png";
-        this.ctx.drawImage(img, this.wolf.curX - 25, this.wolf.curY - 25,
-            50, 50); // drawImage(img, x, y);
+        this.ctx.drawImage(this.wolfImg,
+            this.wolf.curX - Configuration.radius, this.wolf.curY - Configuration.radius,
+            Configuration.radius * 2, Configuration.radius * 2);
 
         // this.ctx.beginPath();
         // this.ctx.arc(this.wolf.curX, this.wolf.curY, Configuration.radius, 0, Math.PI * 2);
